@@ -1,15 +1,21 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TodoApp.Persistence; // 1. BURAYI EKLE (Senin ServiceRegistration burada)
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddAuthentication("admin")
+
+// 2. KRÝTÝK EKSÝK BURASIYDI!
+// Yazdýðýn veritabaný ve Identity servislerini burada sisteme dahil ediyoruz.
+builder.Services.AddPersistenceServices(builder.Configuration);
+
+// JWT Ayarlarý
+builder.Services.AddAuthentication("admin") // Default þema
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new()
@@ -21,12 +27,11 @@ builder.Services.AddAuthentication("admin")
 
             ValidAudience = builder.Configuration["Token:Audience"],
             ValidIssuer = builder.Configuration["Token:Issuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"]))
-
+            // Güvenlik için null kontrolü (!) ekledim
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"]!))
         };
+    });
 
-    }
-    );
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -37,6 +42,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// 3. BUNU DA EKLE
+// Authorization'dan önce Authentication gelmeli ki "Kim bu?" diye bakabilsin.
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

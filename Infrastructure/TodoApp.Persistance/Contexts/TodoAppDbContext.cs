@@ -1,16 +1,22 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using TodoApp.Domain.Entities;
+using TodoApp.Domain.Entities.Identity;
+using TodoApp.Persistence.Identity;
 
-namespace TodoApp.Persistance.Contexts
+namespace TodoApp.Persistence.Contexts
 {
-    public class AppDbContext
-    : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
+    public class TodoAppDbContext
+        : IdentityDbContext<AppUser, AppRole, Guid>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options)
+        public TodoAppDbContext(DbContextOptions<TodoAppDbContext> options)
             : base(options)
         {
         }
@@ -25,14 +31,17 @@ namespace TodoApp.Persistance.Contexts
             {
                 entity.HasKey(x => x.Id);
 
+                entity.Property(x => x.Title)
+                      .IsRequired()
+                      .HasMaxLength(200);
+
                 entity.HasOne(x => x.User)
                       .WithMany(u => u.TodoItems)
                       .HasForeignKey(x => x.UserId)
                       .OnDelete(DeleteBehavior.Cascade);
 
-                entity.Property(x => x.Title)
-                      .IsRequired()
-                      .HasMaxLength(200);
+                // Soft delete global filter (ileride repo işini kolaylaştırır)
+                entity.HasQueryFilter(x => !x.IsDeleted);
             });
         }
     }

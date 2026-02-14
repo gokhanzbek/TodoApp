@@ -10,4 +10,13 @@
     <ProjectReference Include="..\TodoApp.Domain\TodoApp.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Commands\AppUser\LoginUser\" />
+    <Folder Include="Features\Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="14.0.0" />
+  </ItemGroup>
+
 </Project>

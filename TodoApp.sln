@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36616.10 d17.14
+VisualStudioVersion = 17.14.36616.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Infrastructure", "I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.API", "Presentation\TodoApp.API\TodoApp.API.csproj", "{B5DE6D56-800A-4F13-8BE7-5939B6D19B7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Persistance", "Infrastructure\TodoApp.Persistance\TodoApp.Persistance.csproj", "{E1D0C2BC-397A-43EE-AC00-827DBD77A311}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp.Persistence", "Infrastructure\TodoApp.Persistance\TodoApp.Persistence.csproj", "{E1D0C2BC-397A-43EE-AC00-827DBD77A311}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
