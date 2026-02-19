@@ -9,5 +9,6 @@ namespace TodoApp.Application.Abstractions.Token
     public interface ITokenHandler
     {
         DTOs.Token CreateAccessToken(int minute);
+        //isim çakışması oldu o yüzden DTOs dan geldiğini belirttik
     }
 }

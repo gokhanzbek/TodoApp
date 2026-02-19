@@ -29,11 +29,12 @@ namespace TodoApp.Persistence
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
+               
             })
             .AddEntityFrameworkStores<TodoAppDbContext>()
             .AddDefaultTokenProviders();
             services.AddIdentity<AppUser, IdentityRole<Guid>>()
-    .AddEntityFrameworkStores<AppDbContext>()
+    .AddEntityFrameworkStores<TodoAppDbContext>()
     .AddDefaultTokenProviders();
         }
     }

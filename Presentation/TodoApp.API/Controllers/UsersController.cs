@@ -14,11 +14,18 @@ namespace TodoApp.API.Controllers
         {
             _mediator = mediator;
         }
-        public Task<IActionResult> CreateUser(CreateUserCommandRequest createUserCommandRequest)
+        [HttpPost]
+        public async Task<IActionResult> CreateUser(CreateUserCommandRequest createUserCommandRequest)
         {
-            return Ok();
+            CreateUserCommandResponse response = await _mediator.Send(createUserCommandRequest);
+            return Ok(response);
         }
-
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Login(LoginUserCommandRequest loginUserCommandRequest)
+        {
+            LoginUserCommandResponse response = await _mediator.Send(loginUserCommandRequest);
+            return Ok(response);
+        }
 
 
     }
