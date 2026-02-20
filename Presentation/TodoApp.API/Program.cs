@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TodoApp.Application;
 using TodoApp.Persistence; // 1. BURAYI EKLE (Senin ServiceRegistration burada)
-
+using TodoApp.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -13,6 +14,9 @@ builder.Services.AddOpenApi();
 // 2. KRÝTÝK EKSÝK BURASIYDI!
 // Yazdýðýn veritabaný ve Identity servislerini burada sisteme dahil ediyoruz.
 builder.Services.AddPersistenceServices(builder.Configuration);
+builder.Services.AddInfrastructureServices();
+// Application katmanýndaki servisleri (MediatR vb.) sisteme dahil ediyoruz
+builder.Services.AddApplicationServices();
 
 // JWT Ayarlarý
 builder.Services.AddAuthentication("admin") // Default þema

@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TodoApp.Domain.Entities;
 using TodoApp.Domain.Entities.Identity;
-using TodoApp.Persistence.Identity;
+
 
 namespace TodoApp.Persistence.Contexts
 {

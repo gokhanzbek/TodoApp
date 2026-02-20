@@ -18,11 +18,7 @@ namespace TodoApp.Application.Features.Commands.AppUser.LoginUser
         readonly ITokenHandler _tokenHandler;
 
 
-        public LoginUserCommandHandler(UserManager<Domain.Entities.Identity.AppUser> userManager, SignInManager<Domain.Entities.Identity.AppUser> signInManager)
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
-        }
+        
 
         public LoginUserCommandHandler(
             UserManager<Domain.Entities.Identity.AppUser> userManager,

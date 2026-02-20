@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TodoApp.Persistence.Identity
+namespace TodoApp.Application.Features.Commands.Todo.CreateTodo
 {
-    internal class IdentityRole
+    internal class CreateTodoCommandHandler
     {
     }
 }

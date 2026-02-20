@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TodoApp.Domain.Entities.Identity;
 using TodoApp.Persistence.Contexts;
-using TodoApp.Persistence.Identity;
+
 
 namespace TodoApp.Persistence
 {
@@ -17,26 +17,26 @@ namespace TodoApp.Persistence
     {
         public static void AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
-            // Veritabanı bağlantısı
+            // 1. Veritabanı bağlantısı
             services.AddDbContext<TodoAppDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-            // --- IDENTITY AYARLARINI EKLE ---
-            services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
+            // 2. IDENTITY AYARLARI (Sadece bir tane kalmalı!)
+            // Eğer projenizde "AppUser" kullanıyorsanız ApplicationUser olan bloğu tamamen silin.
+            services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
             {
+                // Şifre politikalarınız
                 options.Password.RequiredLength = 6;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
-               
             })
             .AddEntityFrameworkStores<TodoAppDbContext>()
             .AddDefaultTokenProviders();
-            services.AddIdentity<AppUser, IdentityRole<Guid>>()
-    .AddEntityFrameworkStores<TodoAppDbContext>()
-    .AddDefaultTokenProviders();
+
+            // DİKKAT: Alttaki ikinci AddIdentity çağrısını sildik!
         }
     }
 }
-    
+
