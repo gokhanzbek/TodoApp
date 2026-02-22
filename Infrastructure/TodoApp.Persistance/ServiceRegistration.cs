@@ -7,8 +7,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TodoApp.Application.Repositories;
+using TodoApp.Application.Repositories.TodoApp.Application.Repositories.TodoItems;
 using TodoApp.Domain.Entities.Identity;
 using TodoApp.Persistence.Contexts;
+using TodoApp.Persistence.Repositories.TodoItems;
 
 
 namespace TodoApp.Persistence
@@ -34,6 +37,8 @@ namespace TodoApp.Persistence
             })
             .AddEntityFrameworkStores<TodoAppDbContext>()
             .AddDefaultTokenProviders();
+            services.AddScoped<ITodoReadRepository, TodoReadRepository>();
+            services.AddScoped<ITodoWriteRepository, TodoWriteRepository>();
 
             // DİKKAT: Alttaki ikinci AddIdentity çağrısını sildik!
         }
