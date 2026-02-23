@@ -12,7 +12,7 @@ namespace TodoApp.Application.Features.Commands.Todo.UpdateTodo
         public string Id { get; set; } = null!; // Hangi görev güncellenecek?
         public string Title { get; set; } = null!;
         public string? Description { get; set; }
-        public DateTime TodoDate { get; set; }
+        public DateOnly TodoDate { get; set; }
         public bool IsCompleted { get; set; } // Görev tamamlandı mı?
     }
 }

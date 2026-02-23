@@ -2,48 +2,59 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TodoApp.Application;
-using TodoApp.Persistence; // 1. BURAYI EKLE (Senin ServiceRegistration burada)
+using TodoApp.Persistence;
 using TodoApp.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// --- SERVÝSLER (BUILDER) ---
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-// 2. KRÝTÝK EKSÝK BURASIYDI!
-// Yazdýðýn veritabaný ve Identity servislerini burada sisteme dahil ediyoruz.
+// Katmanlý mimari kayýtlarý
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
-// Application katmanýndaki servisleri (MediatR vb.) sisteme dahil ediyoruz
 builder.Services.AddApplicationServices();
 
 builder.Services.AddHttpContextAccessor();
+
+// 1. CORS POLÝTÝKASINI TANIMLA (Frontend eriþimi için þart!)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
+
 // JWT Ayarlarý
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}) 
-    .AddJwtBearer(options =>
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new()
     {
-        options.TokenValidationParameters = new()
-        {
-            ValidateAudience = true,
-            ValidateIssuer = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-
-            ValidAudience = builder.Configuration["Token:Audience"],
-            ValidIssuer = builder.Configuration["Token:Issuer"],
-            // Güvenlik için null kontrolü (!) ekledim
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"]!))
-        };
-    });
+        ValidateAudience = true,
+        ValidateIssuer = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidAudience = builder.Configuration["Token:Audience"],
+        ValidIssuer = builder.Configuration["Token:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"]!))
+    };
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// --- PIPELINE (APP) ---
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -51,8 +62,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// 3. BUNU DA EKLE
-// Authorization'dan önce Authentication gelmeli ki "Kim bu?" diye bakabilsin.
+// 2. CORS KULLANIMI (Sýralama çok önemli!)
+app.UseCors("AllowAll");
+
+// 3. KÝMLÝK VE YETKÝ KONTROLÜ
 app.UseAuthentication();
 app.UseAuthorization();
 

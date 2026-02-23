@@ -29,11 +29,15 @@ namespace TodoApp.Persistence.Contexts
 
             builder.Entity<TodoItem>(entity =>
             {
+                
                 entity.HasKey(x => x.Id);
 
                 entity.Property(x => x.Title)
                       .IsRequired()
                       .HasMaxLength(200);
+
+                entity.Property(x => x.TodoDate)
+              .HasColumnType("date");
 
                 entity.HasOne(x => x.User)
                       .WithMany(u => u.TodoItems)
