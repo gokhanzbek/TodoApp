@@ -12,6 +12,6 @@ namespace TodoApp.Domain.Entities.Common
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
 
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; } = false; //Soft Delete
     }
 }

@@ -11,7 +11,7 @@ namespace TodoApp.Domain.Entities
     public class TodoItem : BaseEntity
     {
         public string Title { get; set; } = null!;
-        public DateTime TodoDate { get; set; }
+        public DateOnly TodoDate { get; set; }
         public string? Description { get; set; }
         public bool IsCompleted { get; set; }
 

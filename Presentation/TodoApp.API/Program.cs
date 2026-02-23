@@ -18,8 +18,13 @@ builder.Services.AddInfrastructureServices();
 // Application katmanýndaki servisleri (MediatR vb.) sisteme dahil ediyoruz
 builder.Services.AddApplicationServices();
 
+builder.Services.AddHttpContextAccessor();
 // JWT Ayarlarý
-builder.Services.AddAuthentication("admin") // Default þema
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}) 
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new()

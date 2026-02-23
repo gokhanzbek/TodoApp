@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TodoApp.Application.Features.Commands.Todo.CreateTodo;
@@ -20,6 +21,7 @@ namespace TodoApp.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateTodo(CreateTodoCommandRequest request)
         {
             // İsteği MediatR'a gönderiyoruz, o gidip Handler'ı bulup çalıştıracak

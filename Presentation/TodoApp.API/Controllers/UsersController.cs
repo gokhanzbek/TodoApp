@@ -21,7 +21,7 @@ namespace TodoApp.API.Controllers
             CreateUserCommandResponse response = await _mediator.Send(createUserCommandRequest);
             return Ok(response);
         }
-        [HttpPost("[action]")]
+        [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginUserCommandRequest loginUserCommandRequest)
         {
             LoginUserCommandResponse response = await _mediator.Send(loginUserCommandRequest);

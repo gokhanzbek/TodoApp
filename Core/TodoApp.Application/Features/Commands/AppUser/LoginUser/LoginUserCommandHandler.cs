@@ -47,7 +47,7 @@ namespace TodoApp.Application.Features.Commands.AppUser.LoginUser
             SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
             if (result.Succeeded) // Authentication başarılı!
             {
-                Token token = _tokenHandler.CreateAccessToken(5);
+                Token token = _tokenHandler.CreateAccessToken(5, user);
                 return new LoginUserSuccessCommandResponse()
                 {
                     Token = token

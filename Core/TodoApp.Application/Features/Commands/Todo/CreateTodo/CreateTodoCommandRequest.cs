@@ -11,6 +11,6 @@ namespace TodoApp.Application.Features.Commands.Todo.CreateTodo
     {
         public string Title { get; set; } = null!;
         public string? Description { get; set; }
-        public DateTime TodoDate { get; set; }
+        public DateOnly TodoDate { get; set; }
     }
 }

@@ -3,10 +3,10 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+using System.Security.Claims; // Claim için gerekli!
 using System.Text;
-using System.Threading.Tasks;
 using TodoApp.Application.Abstractions.Token;
+using TodoApp.Domain.Entities.Identity; // AppUser için (kendi yoluna göre düzeltirsin)
 
 namespace TodoApp.Infrastructure.Services.Token
 {
@@ -14,43 +14,43 @@ namespace TodoApp.Infrastructure.Services.Token
     {
         readonly IConfiguration _configuration;
 
-        public TokenHandler(IConfiguration configuration) // Yazım hatası düzeltildi
+        public TokenHandler(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public Application.DTOs.Token CreateAccessToken(int minute) // 's' harfi eklendi
+        // DİKKAT: Buraya AppUser parametresi ekledik!
+        public Application.DTOs.Token CreateAccessToken(int minute, AppUser user)
         {
             Application.DTOs.Token token = new();
 
-            // Security Key'in simetriğini alıyoruz. 
-            // Değişken adı '_configuration' olarak düzeltildi.
             SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));
-
-            // Şifrelenmiş kimliği oluşturuyoruz.
             SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            // Oluşturulacak token ayarlarını veriyoruz.
             token.Expiration = DateTime.UtcNow.AddMinutes(minute);
+
+            // 1. TOKEN'IN İÇİNE GİZLEYECEĞİMİZ KİMLİK BİLGİLERİ (CLAIMS)
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // ID'yi basıyoruz
+                new Claim(ClaimTypes.Name, user.UserName) // İstersen adını da basabilirsin
+            };
 
             JwtSecurityToken securityToken = new JwtSecurityToken(
                 audience: _configuration["Token:Audience"],
                 issuer: _configuration["Token:Issuer"],
                 expires: token.Expiration,
                 notBefore: DateTime.UtcNow,
+                claims: claims, // 2. OLUŞTURDUĞUMUZ KİMLİĞİ TOKEN'A VERİYORUZ
                 signingCredentials: signingCredentials
             );
 
-            // Token oluşturucu sınıfından bir örnek alalım.
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             token.AccessToken = tokenHandler.WriteToken(securityToken);
 
             return token;
         }
 
-        public Application.DTOs.Token CreateAccesToken(int minute)
-        {
-            throw new NotImplementedException();
-        }
+        // Kullanmadığın hatalı interface metodunu şimdilik sildim, kafayı karıştırmasın.
     }
 }

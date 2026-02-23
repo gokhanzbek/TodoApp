@@ -9,5 +9,6 @@ namespace TodoApp.Application.Features.Queries.Todo.GetAllTodos
 {
     public class GetAllTodosQueryRequest : IRequest<GetAllTodosQueryResponse>
     {
+        public DateOnly? TargetDate { get; set; }
     }
 }
